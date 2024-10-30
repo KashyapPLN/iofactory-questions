@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Max Profit Problem</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        input {
+            margin-right: 10px;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Max Profit Problem</h1>
+    <label for="timeUnit">Enter Time Unit:</label>
+    <input type="number" id="timeUnit" min="1" required>
+    <button id="calculateBtn">Calculate Max Profit</button>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        function maxProfit(n) {
+            let maxEarnings = 0;
+            let bestCombinations = [];
+
+            for (let t = 0; t <= Math.floor(n / 5); t++) {
+                for (let p = 0; p <= Math.floor(n / 4); p++) {
+                    for (let c = 0; c <= Math.floor(n / 10); c++) {
+                        let totalTime = 5 * t + 4 * p + 10 * c;
+
+                        if (totalTime <= n) {
+
+                            let earnings = 1500 * t + 1000 * p + 3000 * c;
+
+                            if (earnings > maxEarnings) {
+                                maxEarnings = earnings;
+                                bestCombinations = [{ t, p, c }];
+                            } else if (earnings === maxEarnings) {
+                                bestCombinations.push({ t, p, c });
+                            }
+                        }
+                    }
+                }
+            }
+
+            return { maxEarnings, bestCombinations };
+        }
+
+        document.getElementById('calculateBtn').addEventListener('click', function () {
+            const timeUnit = parseInt(document.getElementById('timeUnit').value);
+            const { maxEarnings, bestCombinations } = maxProfit(timeUnit);
+            let resultText = `Time Unit: ${timeUnit}, Earnings: $${maxEarnings}<br>Solutions: `;
+
+            if (bestCombinations.length > 0) {
+                resultText += bestCombinations.map(comb => `T: ${comb.t} P: ${comb.p} C: ${comb.c}`).join('<br>');
+            } else {
+                resultText += `No valid combination found.`;
+            }
+
+            document.getElementById('result').innerHTML = resultText;
+        });
+    </script>
+</body>
+
+</html>
